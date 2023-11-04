@@ -1,0 +1,15 @@
+[project]
+name = "http-client-async"
+requires-python = ">=3.11"
+authors = [
+    {name = "Mike Artemiev", email = "mixartemev@gmail.com"},
+]
+dependencies = ["aiohttp"]
+version = "0.0.1"
+
+[project.urls]
+Homepage = "https://github.com/mixartemev/http-client"
+Repository = "https://github.com/mixartemev/http-client"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

@@ -1,9 +1,13 @@
 from aiohttp import ClientSession, ClientResponse
+from aiohttp.http_exceptions import HttpProcessingError
 
 
-class Public:
-    def __init__(self, base_url: str = None):
-        self.session = ClientSession(base_url)
+class Client:
+    base_url: str = 'https://dapp.deals/'
+    headers: dict = {}
+
+    def __init__(self):
+        self.session = ClientSession(self.base_url, headers=self.headers)
 
     async def close(self):
         await self.session.close()
@@ -17,7 +21,9 @@ class Public:
         return await self.proc(resp)
 
     @staticmethod
-    async def proc(resp: ClientResponse) -> dict | ClientResponse:
+    async def proc(resp: ClientResponse) -> dict | str:
+        if not str(resp.status).startswith('2'):
+            raise HttpProcessingError(code=resp.status, message=str(resp.content))
         if resp.content_type.endswith('/json'):
             return await resp.json()
-        return resp
+        return await resp.text()

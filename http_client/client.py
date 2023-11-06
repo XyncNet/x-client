@@ -3,7 +3,7 @@ from aiohttp.http_exceptions import HttpProcessingError
 
 
 class Client:
-    base_url: str = 'https://dapp.deals/'
+    base_url: str = 'https://dapp.deals'
     headers: dict = {}
 
     def __init__(self):

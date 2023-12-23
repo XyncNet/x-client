@@ -1,6 +1,9 @@
 from aiohttp import ClientSession, ClientResponse
-from aiohttp.http_exceptions import HttpProcessingError
+from aiohttp.http_exceptions import HttpProcessingError, HttpBadRequest
 
+class HttpNotFound(HttpProcessingError):
+    code = 404
+    message = 'NotFound'
 
 class Client:
     base_url: str = 'https://dapp.deals'
@@ -24,6 +27,8 @@ class Client:
     @staticmethod
     async def proc(resp: ClientResponse) -> dict | str:
         if not str(resp.status).startswith('2'):
+            if resp.status==404:
+                raise HttpNotFound()
             raise HttpProcessingError(code=resp.status, message=str(resp.content))
         if resp.content_type.endswith('/json'):
             return await resp.json()

@@ -1,13 +1,13 @@
 from aiohttp import ClientSession, ClientResponse
-from aiohttp.http_exceptions import HttpProcessingError, HttpBadRequest
+from aiohttp.http_exceptions import HttpProcessingError
 
 class HttpNotFound(HttpProcessingError):
     code = 404
     message = 'NotFound'
 
 class Client:
-    base_url: str = 'https://dapp.deals'
-    middle_url: str = '/'
+    base_url: str = None
+    middle_url: str = ''
     headers: dict = {}
 
     def __init__(self):

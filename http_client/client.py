@@ -29,7 +29,7 @@ class Client:
         if not str(resp.status).startswith('2'):
             if resp.status==404:
                 raise HttpNotFound()
-            raise HttpProcessingError(code=resp.status, message=str(resp.content))
+            raise HttpProcessingError(code=resp.status, message=await resp.text())
         if resp.content_type.endswith('/json'):
             return await resp.json()
         return await resp.text()

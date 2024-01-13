@@ -1,4 +1,5 @@
 from aiohttp import ClientOSError
+from aiohttp.http_exceptions import HttpProcessingError
 
 from http_client.client import Client
 
@@ -10,7 +11,7 @@ def repeat(times: int = 5, wait: int = 3):
             for attempt in range(times):
                 try:
                     return await func(*args, **kwargs)
-                except ClientOSError as e:
+                except (ClientOSError, HttpProcessingError) as e:
                     print(f'{func.__name__}: attempt {attempt+1}:',  e)
                     await sleep(wait)
             return print('Patience over!')

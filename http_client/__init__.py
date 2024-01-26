@@ -1,7 +1,7 @@
 from http_client.client import Client
 
 #decorator for network funcs
-def repeat(times: int = 4, wait: int = 3):
+def repeat_on_fault(times: int = 4, wait: int = 3):
     def decorator(func: callable):
         from asyncio import sleep
         async def wrapper(*args, **kwargs):

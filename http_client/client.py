@@ -21,7 +21,10 @@ class Client:
         return await self.proc(resp)
 
     async def post(self, url: str, data: {} = None, params: {} = None):
-        resp = await self.session.post(self.middle_url+url, json=data, params=params)
+        if isinstance(data, dict):
+            resp = await self.session.post(self.middle_url + url, json=data, params=params)
+        else:
+            resp = await self.session.post(self.middle_url + url, data=data, params=params)
         return await self.proc(resp)
 
     @staticmethod

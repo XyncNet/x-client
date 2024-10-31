@@ -1,15 +1,38 @@
 [project]
-name = "http-client-async"
-requires-python = ">=3.11"
+name = "xn-client"
+requires-python = ">=3.12"
 authors = [
     {name = "Mike Artemiev", email = "mixartemev@gmail.com"},
 ]
+license = {text = "MIT"}
+dynamic = ["version"]
 dependencies = ["aiohttp"]
-version = "0.1.4"
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "pytest-asyncio",
+    "python-dotenv",
+    "twine"
+]
 
 [project.urls]
-Homepage = "https://github.com/mixartemev/http-client"
-Repository = "https://github.com/mixartemev/http-client"
+Homepage = "https://github.com/XyncNet/x-client"
+Repository = "https://github.com/XyncNet/x-client"
+
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm[toml]>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["x_client"]
+
+[tool.setuptools_scm]
+version_scheme = "python-simplified-semver" # if "feature" in `branch_name` SEMVER_MINOR++ else SEMVER_PATCH++
+local_scheme = "no-local-version"
+
+[tool.ruff]
+line-length = 120
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

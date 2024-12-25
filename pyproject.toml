@@ -35,6 +35,9 @@ local_scheme = "no-local-version"
 [tool.ruff]
 line-length = 120
 
+[tool.ruff.format]
+preview = true
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "module"  # , "session", "class", "package", "function"

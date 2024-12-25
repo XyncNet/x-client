@@ -32,5 +32,6 @@ repos:
     ### Run the formatter.
     - id: ruff-format
       types_or: [python, pyi]
+      args: [--preview]
       verbose: true
       stages: [pre-commit]

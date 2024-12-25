@@ -17,17 +17,21 @@ class Client:
     async def close(self):
         await self.session.close()
 
-    async def _get(self, url: str, params: dict = None, **kwargs):
-        resp: ClientResponse = await self.session.get(url, params=params, **kwargs)
+    # noinspection PyMethodMayBeStatic
+    def _prehook(self, _payload: dict = None):
+        return {}
+
+    async def _get(self, url: str, params: dict = None):
+        resp: ClientResponse = await self.session.get(url, params=params, headers=self._prehook(params))
         return await self._proc(resp)
 
-    async def _post(self, url: str, data: dict = None, params: dict = None, **kwargs):
+    async def _post(self, url: str, data: dict = None):
         dt = {"json" if isinstance(data, dict) else "data": data}
-        resp = await self.session.post(url, **dt, **kwargs)
+        resp = await self.session.post(url, **dt, headers=self._prehook(data))
         return await self._proc(resp)
 
-    async def _delete(self, url: str, params: dict = None, **kwargs):
-        resp: ClientResponse = await self.session.delete(url, params=params, **kwargs)
+    async def _delete(self, url: str, params: dict = None):
+        resp: ClientResponse = await self.session.delete(url, params=params, headers=self._prehook(params))
         return await self._proc(resp)
 
     async def _proc(self, resp: ClientResponse, data=None) -> dict | str:

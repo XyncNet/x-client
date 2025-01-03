@@ -31,9 +31,12 @@ class Client:
         return self.__resp()
 
     def __resp(self) -> dict:
-        resp = self.cn.getresponse()
-        body = brotli.decompress(resp.read())
-        return loads(body)
+        resp = self.cn.getresponse().read()
+        try:
+            body = loads(resp)
+        except Exception:
+            body = brotli.decompress(resp)
+        return body
 
     def close(self):
         self.cn.close()

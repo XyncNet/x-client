@@ -23,21 +23,21 @@ class Client:
     def _prehook(self, _payload: dict = None):
         return {}
 
-    async def _get(self, url: str, params: dict = None):
+    async def _get(self, url: str, params: dict = None, data_key: str = None):
         asyncio.get_running_loop()
         resp = await self.session.get(url, params=params, headers=self._prehook(params))
-        return await self._proc(resp)
+        return await self._proc(resp, data_key=data_key)
 
-    async def _post(self, url: str, data: dict = None):
+    async def _post(self, url: str, data: dict = None, data_key: str = None):
         dt = {"json" if isinstance(data, dict) else "data": data}
         resp = await self.session.post(url, **dt, headers=self._prehook(data))
-        return await self._proc(resp)
+        return await self._proc(resp, data_key=data_key)
 
     async def _delete(self, url: str, params: dict = None):
         resp: ClientResponse = await self.session.delete(url, params=params, headers=self._prehook(params))
         return await self._proc(resp)
 
-    async def _proc(self, resp: ClientResponse, data_key: str = None, body=None) -> dict | str:
+    async def _proc(self, resp: ClientResponse, data_key: str = None) -> dict | str:
         if not str(resp.status).startswith("2"):
             if resp.status == 404:
                 raise HttpNotFound()

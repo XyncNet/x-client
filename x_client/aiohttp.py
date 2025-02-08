@@ -50,3 +50,9 @@ class Client:
                 raise HttpProcessingError()
             return data
         return await resp.text()
+
+    METHS = {
+        "GET": _get,
+        "POST": _post,
+        "DELETE": _delete,
+    }

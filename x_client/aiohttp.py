@@ -12,9 +12,10 @@ class Client:
     cookies: dict[str, str] = None
     session: ClientSession
 
-    def __init__(self, host: str = None):
+    def __init__(self, host: str = None, headers: dict[str, str] = None, cookies: dict[str, str] = None):
         base_url = f"https://{h}" if (h := host or self.host) else h
-        self.session = ClientSession(base_url, headers=self.headers, cookies=self.cookies)
+        hdrs, cooks = {**self.headers, **(headers or {})}, {**(self.cookies or {}), **(cookies or {})}
+        self.session = ClientSession(base_url, headers=hdrs, cookies=cooks)
 
     async def close(self):
         await self.session.close()

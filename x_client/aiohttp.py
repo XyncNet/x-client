@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from aiohttp import ClientSession, ClientResponse
 from aiohttp.http_exceptions import HttpProcessingError
@@ -40,14 +41,17 @@ class Client:
 
     async def _proc(self, resp: ClientResponse, data_key: str = None) -> dict | str:
         if not str(resp.status).startswith("2"):
+            logging.error(f"response {resp.status}: {await resp.text()}")
             if resp.status == 404:
                 raise HttpNotFound()
             raise HttpProcessingError(code=resp.status, message=await resp.text())
         if resp.content_type.endswith("/json"):
-            data = await resp.json()
+            if not (data := await resp.json()):
+                logging.warning("empty response: " + await resp.text())
             if data_key:
                 if res := data.get(data_key):
                     return res
+                logging.warning("empty response: " + await resp.text())
                 raise HttpProcessingError()
             return data
         return await resp.text()

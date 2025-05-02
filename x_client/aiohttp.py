@@ -30,9 +30,8 @@ class Client:
         resp = await self.session.get(url, params=params, headers=self._prehook(params))
         return await self._proc(resp, data_key=data_key)
 
-    async def _post(self, url: str, data: dict = None, data_key: str = None):
-        dt = {"json" if isinstance(data, dict) else "data": data}
-        resp = await self.session.post(url, **dt, headers=self._prehook(data))
+    async def _post(self, url: str, json: dict = None, data: dict = None, data_key: str = None):
+        resp = await self.session.post(url, json=json, data=data, headers=self._prehook(data))
         return await self._proc(resp, data_key=data_key)
 
     async def _delete(self, url: str, params: dict = None):

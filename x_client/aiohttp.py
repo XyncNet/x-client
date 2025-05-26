@@ -11,12 +11,15 @@ class Client:
     host: str | None  # required
     headers: dict[str, str] = df_hdrs
     cookies: dict[str, str] = None
+    proxy: str = None
     session: ClientSession
 
-    def __init__(self, host: str = None, headers: dict[str, str] = None, cookies: dict[str, str] = None):
+    def __init__(
+        self, host: str = None, headers: dict[str, str] = None, cookies: dict[str, str] = None, proxy: str = None
+    ):
         base_url = f"https://{h}" if (h := host or self.host) else h
         hdrs, cooks = {**self.headers, **(headers or {})}, {**(self.cookies or {}), **(cookies or {})}
-        self.session = ClientSession(base_url, headers=hdrs, cookies=cooks)
+        self.session = ClientSession(base_url, headers=hdrs, cookies=cooks, proxy=proxy)
 
     async def close(self):
         await self.session.close()

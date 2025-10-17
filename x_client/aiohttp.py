@@ -33,16 +33,16 @@ class Client:
         resp = await self.session.get(url, params=params, headers=self._prehook(params))
         return await self._proc(resp, data_key=data_key, bp=params)
 
-    async def _post(self, url: str, json: dict = None, data: dict = None, data_key: str = None):
-        hdrs = {'content-type': 'application/json'} if json else {}
-        resp = await self.session.post(url, json=json, data=data, headers=hdrs | self._prehook(data))
+    async def _post(self, url: str, json: dict = None, data: dict = None, data_key: str = None, hdrs: dict = None):
+        hdrs = (hdrs or {}) | ({"content-type": "application/json;charset=UTF-8"} if json else {}) | self._prehook(data)
+        resp = await self.session.post(url, json=json, data=data, headers=hdrs, skip_auto_headers=["user-agent"])
         return await self._proc(resp, data_key=data_key, bp=json or data)
 
     async def _delete(self, url: str, params: dict = None):
         resp: ClientResponse = await self.session.delete(url, params=params, headers=self._prehook(params))
         return await self._proc(resp)
 
-    async def _proc(self, resp: ClientResponse, data_key: str = None, bp = None) -> dict | str:
+    async def _proc(self, resp: ClientResponse, data_key: str = None, bp=None) -> dict | str:
         if not str(resp.status).startswith("2"):
             logging.error(f"response {resp.status}: {await resp.text()}")
             if resp.status == 404:

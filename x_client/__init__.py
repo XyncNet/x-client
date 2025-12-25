@@ -3,7 +3,7 @@ from aiohttp.http_exceptions import HttpProcessingError
 df_hdrs = {
     "accept": "application/json",
     "cookie": ";",
-    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
 }
 
 
@@ -22,7 +22,7 @@ def repeat_on_fault(times: int = 4, wait: int = 3):
                 try:
                     return await func(*args, **kwargs)
                 except Exception as e:
-                    print(f"{func.__name__}: attempt {attempt+1}:", e)
+                    print(f"{func.__name__}: attempt {attempt + 1}:", e)
                     await sleep(wait)
             return print("Patience over!")
 

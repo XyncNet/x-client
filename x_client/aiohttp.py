@@ -32,14 +32,16 @@ class Client:
         resp = await self.session.get(url, params=params, headers=(hdrs or {}) | self._prehook(params), cookies=cks)
         return await self._proc(resp, params)
 
-    async def _post(self, url: str, json: dict = None, form_data: dict = None, hdrs: dict = None):
+    async def _post(self, url: str, json: dict = None, form_data: dict = None, hdrs: dict = None, cks: dict = None):
         hdrs = (hdrs or {}) | self._prehook(json or form_data)
         if json:
             hdrs |= {"content-type": "application/json;charset=UTF-8"}
         elif form_data:
             hdrs |= {"Content-Type": "application/x-www-form-urlencoded"}
         skip_hdrs = ["user-agent"]
-        resp = await self.session.post(url, json=json, data=form_data, headers=hdrs, skip_auto_headers=skip_hdrs)
+        resp = await self.session.post(
+            url, json=json, data=form_data, headers=hdrs, skip_auto_headers=skip_hdrs, cookies=cks
+        )
         return await self._proc(resp, json or form_data)
 
     async def _put(self, url: str, json: dict = None, form_data: dict = None, hdrs: dict = None):

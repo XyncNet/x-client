@@ -28,8 +28,8 @@ class Client:
     def _prehook(self, _payload: dict = None):
         return {}
 
-    async def _get(self, url: str, params: dict = None, hdrs: dict = None):
-        resp = await self.session.get(url, params=params, headers=(hdrs or {}) | self._prehook(params))
+    async def _get(self, url: str, params: dict = None, hdrs: dict = None, cks: dict = None):
+        resp = await self.session.get(url, params=params, headers=(hdrs or {}) | self._prehook(params), cookies=cks)
         return await self._proc(resp, params)
 
     async def _post(self, url: str, json: dict = None, form_data: dict = None, hdrs: dict = None):
